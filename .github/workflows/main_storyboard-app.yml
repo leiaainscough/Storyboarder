@@ -42,10 +42,14 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: ASP-app
+      # Reference a specific commit
+      - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
+      # Reference the major version of a release
+      - uses: actions/checkout@v3
+      # Reference a specific version
+      - uses: actions/checkout@v3.2.0
+      # Reference a branch
+      - uses: actions/checkout@main
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
