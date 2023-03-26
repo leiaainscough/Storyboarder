@@ -1,6 +1,3 @@
-<?php
-      require ('connection.php');
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,39 +12,55 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <?php
-      //if submitted, update db
-      if (isset($_REQUEST['username'])){
-        $username = stripslashes($_REQUEST['username']);
-        $username = mysqli_real_escape_string($conn,$username);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($conn,$password);
-        $forename = stripslashes($_REQUEST['forename']);
-        $forename = mysqli_real_escape_string($conn,$forename);
-        $surname = stripslashes($_REQUEST['surname']);
-        $surname = mysqli_real_escape_string($conn,$surname);
+<?php
+require ('connection.php');
+require ('auth.php');
 
-        $user_type = "T";
-        $user_id = uniqid();
+//if submitted, update db
+if (isset($_POST['submit'])){
+  $username = stripslashes($_REQUEST['client_username']);
+  $username = mysqli_real_escape_string($conn,$username);
+  $password = stripslashes($_REQUEST['password']);
+  $password = mysqli_real_escape_string($conn,$password);
+  $forename = stripslashes($_REQUEST['forename']);
+  $forename = mysqli_real_escape_string($conn,$forename);
+  $surname = stripslashes($_REQUEST['surname']);
+  $surname = mysqli_real_escape_string($conn,$surname);
 
-          $add_user = "INSERT into `users` (username, password, client_id, user_type)
-          VALUES ('$username', '$password', '$user_id', '$user_type')";
+  $client_id = uniqid();
+  $user_type = "C";
 
-          $add_therapist = "INSERT into `therapists` (forename, surname, therapist_id)
-          VALUES ('$forename', '$surname', '$user_id')";
-          
-          $result = mysqli_query($conn, $add_user);
-          $result2 = mysqli_query($conn, $add_therapist);
-        if ($result && $result2){
-          header('Location: login.php');
-          die();
-        } else {
-          echo "<div class='form'>
-          <h3>Registration failed, please try again.</h3>
-          </div>";
-        }
-      }
-  ?>
+    $add_user = "INSERT into `users` (client_id, username, password, user_type)
+    VALUES ('$client_id', '$username', '$password', '$user_type')";
+
+    $t_username = $_SESSION['username'];
+
+    $get_therapist_id = "SELECT client_id FROM `users` WHERE username='$t_username'";
+    
+    $result = mysqli_query($conn,$get_therapist_id);
+          if(mysqli_num_rows($result)==1){
+              while ($row = mysqli_fetch_array($result)){
+                $therapist_id = $row['client_id'];
+              }
+          }else{
+            echo "<h3>Error</h3>";
+          }
+    $add_client = "INSERT into `clients` (client_id, forename, surname, therapist_id)
+    VALUES ('$client_id', '$forename', '$surname', '$therapist_id')";
+    
+    $result = mysqli_query($conn, $add_user);
+    $result2 = mysqli_query($conn, $add_client);
+  if ($result && $result2){
+    header('Location: therapist_home.php');
+    die();
+  } else {
+    echo "<div class='form'>
+    <h3>Could not add client, please try again.</h3>
+    </div>";
+  }
+}
+
+?>
 
   <section class="h-100 gradient-form" style="background-color: #eee;">
     <div class="container py-5 h-100">
@@ -64,8 +77,8 @@
                     <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
                   </div>
   
-                  <form name="registration" action="" method="post">
-                    <p>Enter the form below:</p>
+                  <form name="add_client" action="" method="post">
+                    <p>Enter the client information below:</p>
   
 
                     <div class="form-outline mb-4">
@@ -81,7 +94,7 @@
                     </div>
 
                     <div class="form-outline mb-4">
-                      <input type="text" name="username" id="form2Example11" class="form-control"
+                      <input type="text" name="client_username" id="form2Example11" class="form-control"
                         placeholder="Username" required />
                       <label class="form-label" for="form2Example11">Username</label>
                     </div>
@@ -93,19 +106,11 @@
 
   
                     <div class="text-center pt-1 mb-5 pb-1">
-                      <input type="submit" name="submit" value="Register" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3">
+                      <input type="submit" name="submit" value="Add Client" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3">
                     </div>
   
                   </form>
   
-                </div>
-              </div>
-              <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                  <h4 class="mb-4">We are more than just a company</h4>
-                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 </div>
               </div>
             </div>
