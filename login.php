@@ -30,9 +30,7 @@
             if($rows==1){
                 $_SESSION['username'] = $username;
                 // Redirect user to index.php
-                echo "<div class='form'>
-              <h3>Success</h3>
-              <br/>Click here to <a href='login.php'>Login</a></div>";
+                header("Location: therapist_home.php");
             }else{
               echo "<div class='form'>
               <h3>Username/password is incorrect.</h3>
