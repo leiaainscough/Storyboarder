@@ -1,8 +1,19 @@
 <?php 
   require 'auth.php';
   require 'connection.php';
-  $client = $_SESSION['client'];
 
+  if ($_SESSION['type'] == "C"){
+    $client = $_SESSION['id'];
+  } else {
+    $client = $_SESSION['client'];
+  }
+
+  if (isset($_POST['logout'])){
+    session_destroy();
+    header('Location: login.php');
+    die();
+  }
+  
   if (isset($_POST['view'])){
     $_SESSION['storyboard'] = $_POST['view'];
     header('Location: open_storyboard.php');
@@ -118,28 +129,52 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <header>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-          <a href="#" class="navbar-brand d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <strong>Storyboard</strong>
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
-      </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <?php 
+          if ($_SESSION['type'] == "C"){
+            echo '<a class="nav-link" href="client_album.php">Home <span class="sr-only">(current)</span></a>';
+          } else {
+            echo '<a class="nav-link" href="client_list.php">Home <span class="sr-only">(current)</span></a>';
+          }
+        ?>
+      </li>
+    </ul>
+    <form method="post" class="form-inline my-2 my-lg-0">
+      <button name="logout" class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+    </form>
+  </div>
+</nav>
     </header>
     
     <main>
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <?php echo '
-            <h1 class="fw-light">', $client_name, 's Storyboards</h1>' ?>
+            <?php 
+                if ($_SESSION['type'] == "C"){
+                  echo '<h1 class="fw-light">My Album</h1>';
+                } else {
+                  echo '<h1 class="fw-light">', $client_name, 's Album</h1>';
+                };
+            
+            ?>
             <p class="lead text-muted">Click the thumbnail to view the full storyboard.</p>
             <p>
-              <a href="new_storyboard.php" class="btn btn-primary my-2">Assign a Storyboard</a>
+            <?php 
+                if ($_SESSION['type'] == "C"){
+                  echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Create new Storyboard</a>';
+                } else {
+                  echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Assign a Storyboard</a>';
+                };
+            ?>              
             </p>
           </div>
         </div>
@@ -149,10 +184,20 @@
           <div class="card shadow-sm">
             <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
             <div class="card-body">
-            <?php echo '<p class="card-text">Send a new storyboard to ', $client_name, '.</p>'?>
+              <?php 
+                if ($_SESSION['type'] == "T"){
+                  echo '<p class="card-text">Assign a new storyboard to ', $client_name, '.</p>';
+                };            
+              ?>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="new_storyboard.php" class="btn btn-primary my-2">Assign Storyboard</a>                
+                <?php  
+                  if ($_SESSION['type'] == "C"){
+                    echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Create new Storyboard</a>';
+                  } else {
+                    echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Assign a Storyboard</a>';
+                  };
+                ?>
                 </div>
               </div>
             </div>
