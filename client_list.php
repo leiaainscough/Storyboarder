@@ -1,45 +1,33 @@
-<?php 
-  require 'auth.php';
-  require 'connection.php';
-  $storyboard_id = $_SESSION['storyboard'];
+<?php
+require 'auth.php';
+require 'connection.php';
 
-  if (isset($_POST['logout'])){
-    session_destroy();
-    header('Location: login.php');
-    die();
+if (isset($_POST['logout'])){
+  session_destroy();
+  header('Location: login.php');
+  die();
+}
+
+if (isset($_POST['open'])){
+  $_SESSION['client'] = $_POST['open'];
+  header('Location: client_album.php');
+  die();
+}
+
+$therapist_id = $_SESSION['id'];
+
+$get_clients = "SELECT * FROM `clients` WHERE therapist_id='$therapist_id'";
+$result = mysqli_query($conn,$get_clients);
+
+$clients = array();
+$i = 0; 
+if (mysqli_num_rows($result) > 0) {
+  while($row = mysqli_fetch_array($result)) {
+    $clients[$i] = $row;
+    $i++;
   }
-
-  /*
-  if (isset($_POST['open'])){
-    $_SESSION['storyboard'] = $_POST['open'];
-    header('Location: open_storyboard.php');
-    die();
-  }; */
-
-
-  $get_title = "SELECT title, no_frames FROM `storyboards` WHERE storyboard_id='$storyboard_id'";
-  $result = mysqli_query($conn, $get_title);
-
-  if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_array($result)) {
-      $title = $row['title'];
-      $no_frames = $row['no_frames'];
-    }
-  }
-
-  $get_frames = "SELECT * FROM `frames` WHERE storyboard_id='$storyboard_id'";
-  $result = mysqli_query($conn, $get_frames);
-
-  $frames = array();
-  $i = 0; 
-  if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_array($result)) {
-      $frames[$i] = $row;
-      $i++;
-    }
-  }
+}
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -137,7 +125,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="therapist_home.php">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
       </li>
     </ul>
     <form method="post" class="form-inline my-2 my-lg-0">
@@ -152,40 +140,53 @@
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <?php echo '
-            <h1 class="fw-light">', $title,'</h1>' ?>
-            <p class="lead text-muted">Click the thumbnail to view the frame.</p>
+            <h1 class="fw-light">My Clients</h1>
+            <p class="lead text-muted">Click a client to view their profile</p>
+            <p>
+              <a href="new_client.php" class="btn btn-primary my-2">New Client</a>
+            </p>
           </div>
         </div>
       </section>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+            <div class="card-body">
+              <p class="card-text">Add a New Client</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="new_client.php" class="btn btn-primary my-2">New Client</a>                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <?php
-        if ($frames)
+        if (!$clients) {
+
+        } else {
           $i = 0;
-          foreach ($frames as $row) {
+          foreach ($clients as $row) {
             echo '
             <div class="card shadow-sm">
-
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">';
-                  if ($frames[$i]['caption']){
-                    echo '
-                    <p class="card-text">', $frames[$i]['caption'],'</p>
-                  })';
-                  }
-                  echo'
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" 
+                aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect 
+                width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">', $clients[$i]['forename'], ' ', $clients[$i]['surname'], '</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary" method="post">View Full Screen</button>
-                    </div>
+                    <form action="" method="post">
+                      <button name="open" value=', $clients[$i]['client_id'], ' class="btn btn-sm btn-outline-secondary" 
+                      >Open</button>
+                    </form>
                   </div>
                 </div>
               </div>
             </div> ';
             $i++;
           } 
-        ?>
+        }?>
       </div>
     </main>
     <footer class="text-muted py-5">

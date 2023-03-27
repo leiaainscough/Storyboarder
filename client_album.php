@@ -1,45 +1,46 @@
 <?php 
   require 'auth.php';
   require 'connection.php';
-  $storyboard_id = $_SESSION['storyboard'];
+
+  if ($_SESSION['type'] == "C"){
+    $client = $_SESSION['id'];
+  } else {
+    $client = $_SESSION['client'];
+  }
 
   if (isset($_POST['logout'])){
     session_destroy();
     header('Location: login.php');
     die();
   }
-
-  /*
-  if (isset($_POST['open'])){
-    $_SESSION['storyboard'] = $_POST['open'];
+  
+  if (isset($_POST['view'])){
+    $_SESSION['storyboard'] = $_POST['view'];
     header('Location: open_storyboard.php');
     die();
-  }; */
+  };
 
-
-  $get_title = "SELECT title, no_frames FROM `storyboards` WHERE storyboard_id='$storyboard_id'";
-  $result = mysqli_query($conn, $get_title);
+  $get_client_name = "SELECT forename, surname FROM `clients` WHERE client_id='$client'";
+  $result = mysqli_query($conn, $get_client_name);
 
   if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_array($result)) {
-      $title = $row['title'];
-      $no_frames = $row['no_frames'];
+      $client_name = $row['forename'] . " " . $row['surname'];
     }
   }
 
-  $get_frames = "SELECT * FROM `frames` WHERE storyboard_id='$storyboard_id'";
-  $result = mysqli_query($conn, $get_frames);
+  $get_storyboards = "SELECT * FROM `storyboards` WHERE client_id='$client'";
+  $result = mysqli_query($conn, $get_storyboards);
 
-  $frames = array();
+  $storyboards = array();
   $i = 0; 
   if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_array($result)) {
-      $frames[$i] = $row;
+      $storyboards[$i] = $row;
       $i++;
     }
   }
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -137,7 +138,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="therapist_home.php">Home <span class="sr-only">(current)</span></a>
+        <?php 
+          if ($_SESSION['type'] == "C"){
+            echo '<a class="nav-link" href="client_album.php">Home <span class="sr-only">(current)</span></a>';
+          } else {
+            echo '<a class="nav-link" href="client_list.php">Home <span class="sr-only">(current)</span></a>';
+          }
+        ?>
       </li>
     </ul>
     <form method="post" class="form-inline my-2 my-lg-0">
@@ -148,44 +155,76 @@
     </header>
     
     <main>
-
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <?php echo '
-            <h1 class="fw-light">', $title,'</h1>' ?>
-            <p class="lead text-muted">Click the thumbnail to view the frame.</p>
+            <?php 
+                if ($_SESSION['type'] == "C"){
+                  echo '<h1 class="fw-light">My Album</h1>';
+                } else {
+                  echo '<h1 class="fw-light">', $client_name, 's Album</h1>';
+                };
+            
+            ?>
+            <p class="lead text-muted">Click the thumbnail to view the full storyboard.</p>
+            <p>
+            <?php 
+                if ($_SESSION['type'] == "C"){
+                  echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Create new Storyboard</a>';
+                } else {
+                  echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Assign a Storyboard</a>';
+                };
+            ?>              
+            </p>
           </div>
         </div>
       </section>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+            <div class="card-body">
+              <?php 
+                if ($_SESSION['type'] == "T"){
+                  echo '<p class="card-text">Assign a new storyboard to ', $client_name, '.</p>';
+                };            
+              ?>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                <?php  
+                  if ($_SESSION['type'] == "C"){
+                    echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Create new Storyboard</a>';
+                  } else {
+                    echo '<a href="new_storyboard.php" class="btn btn-primary my-2">Assign a Storyboard</a>';
+                  };
+                ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <?php
-        if ($frames)
+        if (!$storyboards) {
+
+        } else {
           $i = 0;
-          foreach ($frames as $row) {
+          foreach ($storyboards as $row) {
             echo '
             <div class="card shadow-sm">
-
                 <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">';
-                  if ($frames[$i]['caption']){
-                    echo '
-                    <p class="card-text">', $frames[$i]['caption'],'</p>
-                  })';
-                  }
-                  echo'
+                <div class="card-body">
+                  <p class="card-text">', $storyboards[$i]['title'],'</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary" method="post">View Full Screen</button>
-                    </div>
+                    <form action="" method="post">
+                        <button name="view" value=', $storyboards[$i]['storyboard_id'],'  class="btn btn-sm btn-outline-secondary">Open</button>
+                    </form>
                   </div>
                 </div>
               </div>
             </div> ';
             $i++;
           } 
-        ?>
+        }?>
       </div>
     </main>
     <footer class="text-muted py-5">

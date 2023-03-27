@@ -1,3 +1,37 @@
+<?php
+    require('connection.php');
+    session_start();
+    // If form submitted, insert values into the database.
+    if (isset($_POST['username'])){
+            // removes backslashes
+      $username = stripslashes($_REQUEST['username']);
+            //escapes special characters in a string
+      $username = mysqli_real_escape_string($conn,$username);
+      $password = stripslashes($_REQUEST['password']);
+      $password = mysqli_real_escape_string($conn,$password);
+      //Checking is user existing in the database or not
+      $query = "SELECT * FROM `users` WHERE username='$username' and password='$password'";
+      $result = mysqli_query($conn,$query);
+      //$rows = mysqli_num_rows($result);
+      if (mysqli_num_rows($result) == 1) {
+          $row = mysqli_fetch_assoc($result);
+          $_SESSION['id'] = $row['client_id'];
+          $_SESSION['type'] = $row['user_type'];
+          if ($_SESSION['type'] == "C"){
+            header("Location: client_album.php");
+          } else if ($_SESSION['type'] == "T") {
+            header("Location: client_list.php");
+          }
+          // Redirect user to index.php        
+      }else{
+          echo "<div class='form'>
+          <h3>Username/password is incorrect.</h3>
+          <br/>Click here to <a href='login.php'>Login</a></div>";
+      }
+    }else{
+  ?> 
+  
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,33 +46,19 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <?php
-    require('connection.php');
-    session_start();
-    // If form submitted, insert values into the database.
-    if (isset($_POST['username'])){
-            // removes backslashes
-      $username = stripslashes($_REQUEST['username']);
-            //escapes special characters in a string
-      $username = mysqli_real_escape_string($conn,$username);
-      $password = stripslashes($_REQUEST['password']);
-      $password = mysqli_real_escape_string($conn,$password);
-      //Checking is user existing in the database or not
-      $query = "SELECT * FROM `users` WHERE username='$username' and password='$password'";
-      $result = mysqli_query($conn,$query);
-      $rows = mysqli_num_rows($result);
-            if($rows==1){
-                $_SESSION['username'] = $username;
-                // Redirect user to index.php
-                header("Location: therapist_home.php");
-            }else{
-              echo "<div class='form'>
-              <h3>Username/password is incorrect.</h3>
-              <br/>Click here to <a href='login.php'>Login</a></div>";
-      }
-    }else{
-  ?> 
-  
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  </div>
+</nav>
+    </header>
   <section class="h-100 gradient-form" style="background-color: #eee;">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -54,7 +74,7 @@
                     <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
                   </div>
   
-                  <form action="" method="post" name="login">
+                  <form name="login" action="" method="post">
                     <p>Please login to your account</p>
   
                     <div class="form-outline mb-4">
@@ -96,7 +116,6 @@
       </div>
     </div>
   </section>
-
-  <?php } ?>
+      <?php } ?>
 </body>
 </html>
