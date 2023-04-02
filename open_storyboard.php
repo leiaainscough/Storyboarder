@@ -9,12 +9,17 @@
     die();
   }
 
-  /*
+  
   if (isset($_POST['open'])){
-    $_SESSION['storyboard'] = $_POST['open'];
-    header('Location: open_storyboard.php');
+    $_SESSION['frame'] = $_POST['open'];
+
+    if ($_SESSION['type'] = "C"){
+      header('Location: index2.php');
+    } else {
+      header('Location: open_frame.php');
+    }
     die();
-  }; */
+  };
 
 
   $get_title = "SELECT title, no_frames FROM `storyboards` WHERE storyboard_id='$storyboard_id'";
@@ -25,7 +30,7 @@
       $title = $row['title'];
       $no_frames = $row['no_frames'];
     }
-  }
+  };
 
   $get_frames = "SELECT * FROM `frames` WHERE storyboard_id='$storyboard_id'";
   $result = mysqli_query($conn, $get_frames);
@@ -36,8 +41,8 @@
     while($row = mysqli_fetch_array($result)) {
       $frames[$i] = $row;
       $i++;
-    }
-  }
+    };
+  };
 ?>
 
 
@@ -119,6 +124,17 @@
       .selector-for-some-widget {
         box-sizing: content-box;
       }
+
+      .card-img-top {
+        height: 225px;
+        width:auto;
+        object-fit: contain;
+
+      }
+
+      .card {
+        width:300px;
+      }
     </style>
 
     
@@ -164,28 +180,34 @@
         if ($frames)
           $i = 0;
           foreach ($frames as $row) {
-            echo '
-            <div class="card shadow-sm">
+            $current_frame = $row['frame'];
 
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">';
-                  if ($frames[$i]['caption']){
-                    echo '
-                    <p class="card-text">', $frames[$i]['caption'],'</p>
-                  })';
-                  }
-                  echo'
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary" method="post">View Full Screen</button>
+            echo '
+            <div class="card shadow-sm">';
+                if ($current_frame){
+                  echo'<img class="card-img-top" src="data:image/png;base64,', $current_frame,'"';
+                } else {
+                  echo'<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
+                }
+                echo'
+                  <div class="card-body">';
+                    if ($frames[$i]['caption']){
+                      echo '
+                      <p class="card-text">', $frames[$i]['caption'],'</p>';
+                    }
+                    echo'
+                    <div class="d-flex justify-content-between align-items-center">
+                      <form method="post" action="" class="form-inline my-2 my-lg-0">
+                        <button name="open" type="submit" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary">View Full Screen</button>
+                      </form>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div> ';
+            </div>
+           ';
             $i++;
           } 
         ?>
+        </div> 
       </div>
     </main>
     <footer class="text-muted py-5">
@@ -195,10 +217,7 @@
         </p>
       </div>
     </footer>
-    
-    
         <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    
           
       </body>
 </html>
