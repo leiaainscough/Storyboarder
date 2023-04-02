@@ -1,0 +1,52 @@
+
+
+*{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.nav{
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    opacity: .3;
+    transition: opacity .5s;
+}
+.nav:hover{
+    opacity: 1;
+}
+
+.clr{
+    height: 30px;
+    width: 30px;
+    background-color: blue;
+    border: 3px solid rgb(214, 214, 214);
+    transition: transform .5s;
+}
+.clr:hover{
+    transform: scale(1.2);
+}
+
+button{
+    border: none;
+    outline: none;
+    padding: .6em 1em;
+    border-radius: 3px;
+    background-color: white ;
+}
+
+button:hover{
+    transform: scale(1.2);
+}
+
+.clear{
+    background-color: #03bb56;
+    color: #fff;
+}
+
