@@ -21,6 +21,17 @@
     die();
   };
 
+  if (isset($_POST['open'])){
+    $_SESSION['frame'] = $_POST['open'];
+
+    if ($_SESSION['type'] = "C"){
+      header('Location: index2.php');
+    } else {
+      header('Location: open_frame.php');
+    }
+    die();
+  };
+
 
   $get_title = "SELECT title, no_frames FROM `storyboards` WHERE storyboard_id='$storyboard_id'";
   $result = mysqli_query($conn, $get_title);
@@ -57,8 +68,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
-    
-
+    <link rel="stylesheet" href="style.css">
 
     <!-- Favicons -->
 <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -68,74 +78,6 @@
 <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
 <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
 <meta name="theme-color" content="#712cf9">
-
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .b-example-divider {
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
-
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
-
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-      .selector-for-some-widget {
-        box-sizing: content-box;
-      }
-
-      .card-img-top {
-        height: 225px;
-        width:auto;
-        object-fit: contain;
-
-      }
-
-      .card {
-        width:300px;
-      }
-    </style>
 
     
   </head>
@@ -164,6 +106,7 @@
     </header>
     
     <main>
+      <script src="save_caption.js"></script>
 
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
@@ -187,21 +130,25 @@
                 if ($current_frame){
                   echo'<img class="card-img-top" src="data:image/png;base64,', $current_frame,'"';
                 } else {
-                  echo'<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
-                }
+                  echo'<svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
+                };
                 echo'
-                  <div class="card-body">';
+                <div class="card-body">';
                     if ($frames[$i]['caption']){
                       echo '
-                      <p class="card-text">', $frames[$i]['caption'],'</p>';
-                    }
-                    echo'
-                    <div class="d-flex justify-content-between align-items-center">
-                      <form method="post" action="" class="form-inline my-2 my-lg-0">
-                        <button name="open" type="submit" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary">View Full Screen</button>
+                      <p class="card-text" id="',$frames[$i]['image_no'],'" data-id="',$frames[$i]['frame_id'],'" contenteditable="true">', $frames[$i]['caption'],'</p>';
+                    } else {
+                      echo'
+                      <p class="card-text" id="',$frames[$i]['image_no'],'" data-id="',$frames[$i]['frame_id'],'" contenteditable="true">Add Caption</p>';
+                    };
+                echo'
+                  <div class="d-flex justify-content-between">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="saveContent(\'',$frames[$i]['image_no'],'\')">Save</button>
+                      <form method="post" action="">
+                          <button name="open" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm btn-outline-secondary">View Full Screen</button>
                       </form>
-                    </div>
                   </div>
+                </div>
             </div>
            ';
             $i++;
