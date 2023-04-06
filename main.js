@@ -3,8 +3,8 @@ toolBtns = document.querySelectorAll(".tool"),
 sizeSlider = document.querySelector("#size-slider"),
 color = document.querySelectorAll(".clr"),
 colorBtns = document.querySelectorAll(".colors .option"),
-colorPicker = document.querySelector("#color-picker");
-fillColor = document.querySelector("#fill-color"),
+colorPicker = document.querySelector("#color-picker"),
+fillColor = document.querySelector("#fill-color");
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 let ctx = canvas.getContext("2d");
@@ -70,7 +70,7 @@ exportBtn.addEventListener("click", () => {
     a.click()
 })
 
-let saveBtn = document.querySelector(".save");
+let saveBtn = document.querySelector(".save")
 saveBtn.addEventListener("click", () => {  
     dataURL = canvas.toDataURL()
 
