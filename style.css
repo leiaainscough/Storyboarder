@@ -1,3 +1,50 @@
+.nav-btn{
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 30px;
+}
+
+a{
+  color: black;
+  font-weight: bold;
+}
+nav{
+  padding:10px;
+}
+
+.comment-box{
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.btn {
+    background-color: #7e3067;
+    border-color: none;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #ee7724;
+    border-color: none;
+}
+
+.gradient-custom-2 {
+    /* fallback for old browsers */
+    background: #fccb90;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+main {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -41,7 +88,7 @@
   .nav-scroller .nav {
     display: flex;
     flex-wrap: nowrap;
-    padding-bottom: 1rem;
+    padding: 1rem;
     margin-top: -1px;
     overflow-x: auto;
     text-align: center;
@@ -61,4 +108,18 @@
 
   .card {
     width:300px;
+    height:300px;
+  }
+
+  .navbar{
+    height:75px;
+  }
+
+  a{
+    color: black;
+    font-weight: bold;
+  }
+
+  body{
+    background-color: #fff5fc;
   }
