@@ -65,12 +65,13 @@
         <button class="undo"><img src="icons/undo.svg" alt="Undo Tool"></button>
         <button class="redo"><img src="icons/redo.svg" alt="Redo Tool"></button>
         <button class="clear">Clear</button>
+        <input type="file" id="fileInput">
+
         <button class="save"><img src="icons/save.svg" alt="Save"></button>
         <button class="export"><img src="icons/download.svg" alt="Download"></button>
         <form method="post" action="" class="form-inline my-2 my-lg-0">
-            <button name="back" type="submit"  class="btn btn-sm btn-outline-secondary">Back to Storyboard</button>
+            <button name="back" type="submit"  class="btn btn-sm">Back to Storyboard</button>
         </form>
-
     </div>
 
     <script src="main.js"></script>
@@ -86,8 +87,6 @@
                     img.src = "data:image/png;base64,', $frame,'";';
                             
                 } else {
-                    console_log("no frame exists");
-
                     echo'
                     ctx.fillStyle = "#fff";
                     ctx.fillRect(0, 0, canvas.width, canvas.height)

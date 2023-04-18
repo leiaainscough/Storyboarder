@@ -16,7 +16,8 @@ let selectedTool = "brush";
 let brushWidth = 5;
 
 let state = [];
-current_state = -1;
+let removed = [];
+current_state = 0;
 
 let draw = false;
 
@@ -26,18 +27,9 @@ toolBtns.forEach(btn => {
         document.querySelector(".active").classList.remove("active")
         btn.classList.add("active")
         selectedTool = btn.id
-    });
+    })
 })
 
-colorBtns.forEach(btn => {
-    btn.addEventListener("click", () => { // adding click event to all color button
-        // removing selected class from the previous option and adding on current clicked option
-        document.querySelector(".options .selected").classList.remove("selected");
-        btn.classList.add("selected");
-        // passing selected btn background color as selectedColor value
-        selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
-    });
-});
 
 colorPicker.addEventListener("change", () => {
     // passing picked color value from color picker to last color btn background
@@ -47,18 +39,23 @@ colorPicker.addEventListener("change", () => {
 
 sizeSlider.addEventListener("change", () => brushWidth = sizeSlider.value)
 
-const getSnapshot = () => {
+const stopDraw = () => {
+    draw = false
+
     snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
     state.push(snapshot)
-    current_state++
+
+    if (state.length > 0){
+        current_state = state.length - 1
+    }
+    console.log("finished draw:"+current_state)
+
 }
 
 let clearBtn = document.querySelector(".clear")
 clearBtn.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    state.push(snapshot)
-    current_state = (state.length) - 1
+    stopDraw()
 })
 
 let exportBtn = document.querySelector(".export")
@@ -88,20 +85,67 @@ saveBtn.addEventListener("click", () => {
 
 let undoBtn = document.querySelector(".undo")
 undoBtn.addEventListener("click", () => {
-    current_state = current_state - 1
-    snapshot = state[current_state]
-    ctx.putImageData(snapshot, 0, 0)
-    getSnapshot()
+    if (state.length > 0){
+        to_remove = state.pop()
+        removed.push(to_remove)
+        current_state = (state.length) - 1
+
+        if (current_state < 0){
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            stopDraw()
+        } else{
+            ctx.putImageData(state[current_state], 0, 0)
+        }
+    }
 })
 
 let redoBtn = document.querySelector(".redo")
 redoBtn.addEventListener("click", () => {
-    current_state = current_state + 1
-    snapshot = state[current_state]
-    ctx.putImageData(snapshot, 0, 0)
-    getSnapshot()
+    if (removed.length > 0){
+        to_add = removed.pop()
+        state.push(to_add)
+
+        current_state = state.length - 1
+        ctx.putImageData(state[current_state], 0, 0)
+    }
 })
 
+fileInput.addEventListener('change', () => {  
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.addEventListener('load', () => {
+      const img = new Image();
+      img.src = reader.result;
+      
+      img.addEventListener('load', () => {
+        const canvasAspectRatio = canvas.width / canvas.height
+        const imgAspectRatio = img.width / img.height
+        
+        let width, height, x, y
+        
+        if (imgAspectRatio > canvasAspectRatio) {
+          // Image is wider than canvas
+          width = canvas.width
+          height = width / imgAspectRatio
+          x = 0
+          y = (canvas.height - height) / 2
+        } else {
+          // Image is taller than canvas
+          height = canvas.height
+          width = height * imgAspectRatio
+          y = 0
+          x = (canvas.width - width) / 2
+        }
+        
+        ctx.drawImage(img, x, y, width, height)
+        stopDraw()        
+      })
+    })
+    
+    reader.readAsDataURL(file)
+  })
+  
 const rectMouse = (e) => {
     if (draw){
         if (fillColor.checked){
@@ -218,7 +262,7 @@ const startDrawMouse = (e) => {
     ctx.lineWidth = brushWidth
 
     if (state.length === 0){
-        getSnapshot(e)     
+        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
     }
 }
 
@@ -235,9 +279,6 @@ const drawingMouse = (e) => {
         circMouse(e)
     } else if (selectedTool === "triangle"){
         triMouse(e)
-    } else if (selectedTool === "point"){
-        console.log("selected")
-        selectMouse(e)
     }
 }
 
@@ -253,7 +294,7 @@ const startDrawTouch = (e) => {
     ctx.strokeStyle = selectedColor
 
     if (state.length === 0){
-        getSnapshot(e)     
+        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
     }
 }
 
@@ -273,22 +314,6 @@ const drawingTouch = (e) => {
     }
 }
 
-const saveFrame = (e) => {
-    e.preventDefault()
-    draw = false
-
-    getSnapshot(e)
-}
-
-colorBtns.forEach(btn => {
-    btn.addEventListener("click", () => { // adding click event to all color button
-        // removing selected class from the previous option and adding on current clicked option
-        document.querySelector(".options .selected").classList.remove("selected")
-        btn.classList.add("selected")
-        // passing selected btn background color as selectedColor value
-        selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color")
-    });
-});
 
 colorPicker.addEventListener("change", () => {
     // passing picked color value from color picker to last color btn background
@@ -297,9 +322,9 @@ colorPicker.addEventListener("change", () => {
 });
 
 canvas.addEventListener("mousedown", startDrawMouse)
-canvas.addEventListener("mouseup", saveFrame)
+canvas.addEventListener("mouseup", stopDraw)
 canvas.addEventListener("mousemove", drawingMouse)
 
 canvas.addEventListener("touchstart", startDrawTouch, {passive:false})
-canvas.addEventListener("touchend", saveFrame, {passive:false})
+canvas.addEventListener("touchend", stopDraw, {passive:false})
 canvas.addEventListener("touchmove", drawingTouch, {passive:false})

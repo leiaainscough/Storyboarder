@@ -6,6 +6,17 @@
     overflow: hidden;
 }
 
+.btn {
+    background-color: #7e3067;
+    border-color: none;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #ee7724;
+    border-color: none;
+}
+
 .nav{
     height: 50px;
     position: fixed;

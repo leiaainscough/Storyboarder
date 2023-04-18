@@ -9,11 +9,23 @@
   background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
   }
   
+  nav{
+    padding:10px;
+  }
+
+  .nav-btn{
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 30px;
+  }
+
+  
   @media (min-width: 768px) {
-  .gradient-form {
-  height: 100vh !important;
-  }
-  }
+    .gradient-form {
+    height: 100vh !important;
+    }
+    }
   @media (min-width: 769px) {
   .gradient-custom-2 {
   border-top-right-radius: .3rem;
@@ -24,3 +36,33 @@
   .selector-for-some-widget {
     box-sizing: content-box;
   }
+  
+  .navbar{
+    height:75px;
+  }
+
+  a{
+    color: black;
+    font-weight: bold;
+  }
+
+  body{
+    background-color: #fff5fc;
+  }
+
+  main {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .btn {
+    background-color: #7e3067;
+    border-color: none;
+    color: white;
+  }
+
+  .btn:hover {
+      background-color: #ee7724;
+      border-color: none;
+  }
+

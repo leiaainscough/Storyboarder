@@ -1,13 +1,19 @@
-function saveContent(image_no) {
-  console.log("clicked")
-  image_no = image_no.replace(/\s+/g, '')
-  var element = document.getElementById(image_no)
+function saveCaption(id) {
+  id = id.replace(/\s+/g, '')
+  console.log(id)
+  var element = document.getElementById(id)
   var caption = element.innerHTML
-  var id = element.getAttribute("data-id")
+  console.log(caption)
   var xhr = new XMLHttpRequest()
   xhr.open("POST", "update_caption.php", true)
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+
   xhr.send("id=" + id + "&caption=" + caption)
 
-  console.log(xhr.responseText)
+  xhr.onreadystatechange = function(){
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      window.location.reload()
+      alert("Caption saved")
+    }
+  }
 }
