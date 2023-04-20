@@ -34,6 +34,7 @@ toolBtns.forEach(btn => {
 colorPicker.addEventListener("change", () => {
     // passing picked color value from color picker to last color btn background
     colorPicker.parentElement.style.background = colorPicker.value;
+    selectedColor = colorPicker.value;
     colorPicker.parentElement.click();
 });
 
@@ -55,6 +56,8 @@ const stopDraw = () => {
 let clearBtn = document.querySelector(".clear")
 clearBtn.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = "#fff"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)    
     stopDraw()
 })
 
@@ -188,7 +191,11 @@ const brushMouse = (e) => {
     let mouseX = e.clientX
     let mouseY = e.clientY
 
-    ctx.strokeStyle = selectedColor
+    if (selectedTool === "eraser"){
+        ctx.strokeStyle = "#fff"
+    } else {
+        ctx.strokeStyle = selectedColor
+    }
     ctx.lineCap = 'round'
     ctx.moveTo(prevX, prevY)
     ctx.lineTo(mouseX, mouseY)
@@ -243,6 +250,12 @@ const brushTouch = (e) => {
     e.preventDefault()
     let touchX = e.touches[0].clientX
     let touchY = e.touches[0].clientY
+    
+    if (selectedTool === "eraser"){
+        ctx.strokeStyle = "#fff"
+    } else {
+        ctx.strokeStyle = selectedColor
+    }
 
     ctx.moveTo(prevX, prevY)
     ctx.lineTo(touchX, touchY)
@@ -261,9 +274,8 @@ const startDrawMouse = (e) => {
     ctx.strokeStyle = selectedColor
     ctx.lineWidth = brushWidth
 
-    if (state.length === 0){
-        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    }
+
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
 }
 
 const drawingMouse = (e) => {
@@ -271,7 +283,7 @@ const drawingMouse = (e) => {
     
     ctx.putImageData(snapshot, 0, 0)
     
-    if (selectedTool === "brush"){
+    if (selectedTool === "brush" || selectedTool === "eraser"){
         brushMouse(e)
     } else if (selectedTool === "rectangle"){
         rectMouse(e)
@@ -293,17 +305,17 @@ const startDrawTouch = (e) => {
     ctx.lineCap = 'round'
     ctx.strokeStyle = selectedColor
 
-    if (state.length === 0){
-        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    }
+
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
 }
 
 const drawingTouch = (e) => {
     e.preventDefault()
     if (!draw) return
-    ctx.putImageData(snapshot, 0, 0);
 
-    if (selectedTool === "brush"){
+    ctx.putImageData(snapshot, 0, 0)
+
+    if (selectedTool === "brush" || selectedTool === "eraser"){
         brushTouch(e)
     } else if (selectedTool === "rectangle"){
         rectTouch(e)
@@ -313,13 +325,6 @@ const drawingTouch = (e) => {
         triTouch(e)
     }
 }
-
-
-colorPicker.addEventListener("change", () => {
-    // passing picked color value from color picker to last color btn background
-    colorPicker.parentElement.style.background = colorPicker.value;
-    colorPicker.parentElement.click();
-});
 
 canvas.addEventListener("mousedown", startDrawMouse)
 canvas.addEventListener("mouseup", stopDraw)

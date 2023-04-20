@@ -48,15 +48,14 @@
 <body>
     <canvas id="canvas"></canvas>
     <div class="nav">
-        <button class="tool" id="point"><img src="icons/cursor.svg" alt="Select Tool"></button>
         <div class="colors options">
             <div class="option selected">
                 <input type="color" id="color-picker" value="#4A98F7">
             </div>
         </div>
         <button class="tool active" id="brush"><img src="icons/brush.svg" alt="PaintBrush"></button>
-        <input type="range" id="size-slider" min="1" max="30" value="5">
         <button class="tool" id="eraser"><img src="icons/eraser.svg" alt="Eraser"></button>
+        <input type="range" id="size-slider" min="1" max="30" value="5">
         <input class="tool" type="checkbox" id="fill-color">
         <label for="fill"><img src="icons/fill.svg" alt="Fill Tool"></label>
         <button class="tool" id="rectangle"><img src="icons/rectangle.svg" alt="Rectangle"></button>

@@ -145,7 +145,7 @@
 
     <header>
     <nav class="navbar navbar-expand-lg gradient-custom-2">
-  <a class="navbar-brand" href="#"><img src="img/logo.png" height="75px"></img></a>
+    <a class="navbar-brand align-items-center" href="#"><img src="img/nav-logo.png" height="75px"></img></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -225,36 +225,22 @@
       </section>
       <section class="container-fluid">
       <div class="row justify-content-center">
-      <div class="row justify-content-center">
-        <div class="col-auto">
-          <div class="card shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-            <div class="card-body">
-              <p class="card-text">Add a Frame</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <form method="post" action="">
-                    <button name="add" class="btn btn-sm">New Frame</button>                
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <?php
-        if ($frames)
+        if ($frames){
           $i = 0;
           foreach ($frames as $row) {
-            echo '<div class="col-auto">';
+            echo '<div class="col-lg-3">';
             $current_frame = $row['frame'];
 
             echo '
             <div class="card shadow-sm">';
                 if ($current_frame){
-                  echo'<img class="bd-placeholder-img card-img-top" width="100%" height="225" preserveAspectRatio="xMidYMid slice" focusable="false" src="data:image/png;base64,', $current_frame,'"';
+                  echo'<img class="bd-placeholder-img card-img-top" width="100%"preserveAspectRatio="xMidYMid slice" focusable="false" src="data:image/png;base64,', $current_frame,'">';
                 } else {
-                  echo'<svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
+                  echo'<svg class="bd-placeholder-img card-img-top" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
                 };
                 echo'
+
                 <div class="card-body">';
                     if ($frames[$i]['caption']){
                       echo '
@@ -267,7 +253,7 @@
                   <div class="d-flex justify-content-between">
                       <button class="btn btn-sm" onclick="saveCaption(\'',$frames[$i]['frame_id'],'\')">Save Caption</button>
                       <form method="post" action="">
-                          <button name="view" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm">View Full Screen</button>
+                          <button name="view" value="', $frames [$i]['frame_id'],'"  class="btn btn-sm">Open</button>
                       </form>
                       <form action="" method="post">
                         <button name="delete" value=', $frames[$i]['frame_id'],'  class="btn btn-sm">Delete</button>
@@ -277,11 +263,25 @@
             </div>
            ';
             $i++;
-
             echo '</div>';
-
           } 
+        }
         ?>
+        <div class="col-auto">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Add a new frame</text></svg>
+            <div class="card-body">
+              <p class="card-text">Add a Frame</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <form method="post" action="">
+                    <button name="add" class="btn btn-sm">New Frame</button>                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       </section>
     </main>

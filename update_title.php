@@ -11,5 +11,7 @@ $stmt->bind_param("ss", $updatedTitle, $id);
 $stmt->execute();
 $stmt->close();
 // Send a response back to the XHR request
+header('Refresh:0');
 echo 'Updated content saved successfully.';
+
 ?>

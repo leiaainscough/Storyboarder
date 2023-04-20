@@ -81,7 +81,7 @@ if (isset($_POST['submit'])){
 
   <header>
   <nav class="navbar navbar-expand-lg gradient-custom-2">
-  <a class="navbar-brand" href="#"><img src="img/logo.png" height="75px"></img></a>
+  <a class="navbar-brand align-items-center" href="#"><img src="img/nav-logo.png" height="75px"></img></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

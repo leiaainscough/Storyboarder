@@ -10,6 +10,7 @@ $stmt = $conn->prepare("UPDATE frames SET caption = ? WHERE frame_id = ?");
 $stmt->bind_param("ss", $updatedCaption, $id);
 $stmt->execute();
 $stmt->close();
+header('Refresh:0');
 // Send a response back to the XHR request
 echo 'Updated content saved successfully.';
 ?>

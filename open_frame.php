@@ -92,7 +92,7 @@ if (isset($_POST['delete'])){
   <body>
     <header>
     <nav class="navbar navbar-expand-lg gradient-custom-2">
-    <a class="navbar-brand" href="#"><img src="img/logo.png" height="75px"></img></a>
+    <a class="navbar-brand align-items-center" href="#"><img src="img/nav-logo.png" height="75px"></img></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -144,7 +144,8 @@ if (isset($_POST['delete'])){
         if ($frame['frame']) {
         echo'<img  src="data:image/png;base64,', $frame['frame'],'"';
         } else {
-          echo'<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>';
+          echo'<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Frame</title><rect width="100%" height="100%" fill="#55595c"/>
+          <text x="50%" y="50%" fill="#eceeef" dy=".3em">Empty Frame</text></svg>';
         };
         echo '<p class="col-md-8 fs-4">',$frame['caption'],'</p>';
         ?>
