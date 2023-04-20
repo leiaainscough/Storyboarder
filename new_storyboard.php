@@ -127,7 +127,7 @@ if (isset($_POST['submit'])){
 <body>
   <header>
     <nav class="navbar navbar-expand-lg gradient-custom-2">
-  <a class="navbar-brand" href="#"><img src="img/logo.png" height="75px"></img></a>
+    <a class="navbar-brand align-items-center" href="#"><img src="img/nav-logo.png" height="75px"></img></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -157,10 +157,11 @@ if (isset($_POST['submit'])){
                 echo '
                 <form action="" method="post">
                   <li><button class="dropdown-item" name="open" value=', $clients[$i]['client_id'], '>',$row['forename'], ' ', $row['surname'],'</a></li>
-                </form></ul>
+                </form>
                 ';   
                 $i++;        
               };
+              
             } else if ($_SESSION['type']=="C") {
               echo'                
               <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
@@ -172,12 +173,13 @@ if (isset($_POST['submit'])){
                 echo '
                 <form action="" method="post">
                   <li><button class="dropdown-item" name="open" value=', $storyboards[$i]['storyboard_id'], '>',$row['title'],'</a></li>
-                </form></ul>
+                </form>
                 ';   
                 $i++;        
               };
             };
             ?>
+            </ul>
         </div>
       </li>
     </ul>

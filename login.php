@@ -52,7 +52,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <header>
     <nav class="navbar navbar-expand-lg gradient-custom-2">
-    <a class="navbar-brand" href="#"><img src="img/logo.png" height="75px"></img></a>
+    <a class="navbar-brand align-items-center" href="#"><img src="img/nav-logo.png" height="75px"></img></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -72,9 +72,9 @@
               <div class="col-lg-6">
                 <div class="card-body p-md-5 mx-md-4">
   
-                  <div class="text-center">
-                  <a class="navbar-brand" href="#"><img src="img/logo.png" width="185px"></img></a>
-                  </div>
+                  <section class="text-center">
+                    <img src="img/nav-logo.png" width="200px"></img>
+                  </section>
   
                   <form name="login" action="" method="post">
                     <p>Please login to your account</p>
@@ -105,8 +105,8 @@
               </div>
               <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                <h4 class="mb-4">Paint Your Story</h4>
-                  <p class="small mb-0">Paint Your Story is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
+                <h4 class="mb-4">Journey SketchPad</h4>
+                  <p class="small mb-0">Journey SketchPad is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@
   </section>
   <br>
       <br>
-      <footer class="text-muted py-5">
+      <footer class="text-muted">
       <div class="container">
         <p class="float-end mb-1">
           <a href="#">Back to top</a>
