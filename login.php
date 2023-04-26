@@ -15,8 +15,12 @@
       $username = mysqli_real_escape_string($conn,$username);
       $password = stripslashes($_REQUEST['password']);
       $password = mysqli_real_escape_string($conn,$password);
+
+      $password .= "storytelling";
+      $hashed_password = hash('sha256', $password);
+
       //Checking is user existing in the database or not
-      $query = "SELECT * FROM `users` WHERE username='$username' and password='$password'";
+      $query = "SELECT * FROM `users` WHERE username='$username' and password='$hashed_password'";
       $result = mysqli_query($conn,$query);
       //$rows = mysqli_num_rows($result);
       if (mysqli_num_rows($result) == 1) {
@@ -42,7 +46,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="login.css">
-  <title>Document</title>
+  <title>Login</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="login.css">
 </head>
@@ -105,8 +109,8 @@
               </div>
               <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                <h4 class="mb-4">Journey SketchPad</h4>
-                  <p class="small mb-0">Journey SketchPad is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
+                <h4 class="mb-4">Story Sculptor</h4>
+                  <p class="small mb-0">Story Sculptor is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
                 </div>
               </div>
             </div>
