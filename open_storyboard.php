@@ -1,4 +1,6 @@
 <?php 
+  //Page adapted from Bootstrap album example: Bootstrap. (n.d.). Bootstrap Album Example. Bootstrap. Retrieved January 13, 2023 from https://getbootstrap.com/docs/4.0/examples/album/
+
   require 'auth.php';
   require 'connection.php';
 
@@ -131,9 +133,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.108.0">
-    <title>Home</title>
+    <title>Storyboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" >
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>    <link rel="stylesheet" href="style.css">
@@ -215,7 +215,9 @@
       <section class="py-5 text-center container">
         <div class="row">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <?php echo '
+            <?php 
+            // editable title with update button calling save title function to write to the database
+            echo '
             <h1 id="title" class="fw-light" contenteditable="true">', $title,'</h1>
             <button class="btn btn-sm" onclick="saveTitle(\'',$storyboard_id,'\')">Update Title</button>';
             ?>

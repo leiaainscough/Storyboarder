@@ -1,17 +1,18 @@
+
 <?php
 require('connection.php');
 require('auth.php');
-// Get the ID and updated content from the XHR request
+// Get the storyboard id and title from the request
 $id = $_POST["id"];
 $updatedTitle = $_POST["title"];
 
-// Save the updated content to a file
+// save the title to the storyboards table where the id 
 $stmt = $conn->prepare("UPDATE storyboards SET title = ? WHERE storyboard_id = ?");
 $stmt->bind_param("ss", $updatedTitle, $id);
 $stmt->execute();
 $stmt->close();
-// Send a response back to the XHR request
-header('Refresh:0');
+//send success message
 echo 'Updated content saved successfully.';
 
 ?>
+

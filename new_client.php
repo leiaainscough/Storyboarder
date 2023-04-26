@@ -39,11 +39,14 @@ if (isset($_POST['submit'])){
   $surname = stripslashes($_REQUEST['surname']);
   $surname = mysqli_real_escape_string($conn,$surname);
 
+  $password .= "storytelling";
+  $hashed_password = hash('sha256', $password);
+  
   $client_id = uniqid();
   $user_type = "C";
 
     $add_user = "INSERT into `users` (client_id, username, password, user_type)
-    VALUES ('$client_id', '$username', '$password', '$user_type')";
+    VALUES ('$client_id', '$username', '$hashed_password', '$user_type')";
 
     $therapist_id = $_SESSION['id'];
 

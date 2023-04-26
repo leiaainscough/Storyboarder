@@ -1,4 +1,6 @@
 <?php
+  //Page adapted from Bootstrap album example: Bootstrap. (n.d.). Bootstrap Album Example. Bootstrap. Retrieved January 13, 2023 from https://getbootstrap.com/docs/4.0/examples/album/
+
 require 'auth.php';
 require 'connection.php';
 
@@ -77,9 +79,7 @@ if (isset($_POST['delete'])){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.108.0">
-    <title>Home</title>
+    <title>Clients</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" >
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>    <link rel="stylesheet" href="style.css">
@@ -162,7 +162,14 @@ if (isset($_POST['delete'])){
 
         } else {
           $i = 0;
+          //for each client the therapist has, loop through and create a card displaying their name, 
+          //headed with a piece of their artwork and buttons to open or delete their profile
           foreach ($clients as $row) {
+            //create new column
+            
+            //get a client frame
+
+            
             echo'<div class="col-auto">';
             echo '
             <div class="card shadow-sm">

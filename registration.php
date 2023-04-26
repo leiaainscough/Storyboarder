@@ -8,7 +8,7 @@
 
         $check_username = "SELECT username from users WHERE username = '$username'";
         $result = mysqli_query($conn, $check_username);
-        if ($result){
+        if ($result == $username){
           echo "<script>alert('Username already exists, please choose another.')</script>";
           header("Refresh:0");
           return;
@@ -21,11 +21,14 @@
         $surname = stripslashes($_REQUEST['surname']);
         $surname = mysqli_real_escape_string($conn,$surname);
 
+        $password .= "storytelling";
+        $hashed_password = hash('sha256', $password);
+
         $user_type = "T";
         $user_id = uniqid();
 
           $add_user = "INSERT into `users` (username, password, client_id, user_type)
-          VALUES ('$username', '$password', '$user_id', '$user_type')";
+          VALUES ('$username', '$hashed_password', '$user_id', '$user_type')";
 
           $add_therapist = "INSERT into `therapists` (forename, surname, therapist_id)
           VALUES ('$forename', '$surname', '$user_id')";
@@ -50,7 +53,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="login.css">
-  <title>Document</title>
+  <title>Login</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="login.css">
 
@@ -126,8 +129,8 @@
               </div>
               <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                  <h4 class="mb-4">Paint Your Story</h4>
-                  <p class="small mb-0">Paint Your Story is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
+                  <h4 class="mb-4">Story Sculptor</h4>
+                  <p class="small mb-0">Story Sculptor is a collaborative and unique application which grants clients the freedom to tell stories in a new way. The application aims to be a choice of medium in art therapy sessions, to enable clients to find their voice through experimentation with digital art.</p>
                 </div>
               </div>
             </div>
